@@ -4,10 +4,25 @@ import EventCard from '@/components/globals/EventCard.vue';
 import EventForm from '@/components/globals/EventForm.vue';
 import ModalWrapper from '@/components/globals/ModalWrapper.vue';
 import { eventsService } from '@/services/EventsService';
+import { logger } from '@/utils/Logger';
 import Pop from '@/utils/Pop';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-const towerEvents = computed(() => AppState.towerEvents)
+const filterBy = ref('all')
+const towerEvents = computed(() => {
+  if (filterBy.value == 'all') {
+    return AppState.towerEvents
+  }
+  return AppState.towerEvents.filter(towerEvent => towerEvent.type == filterBy.value)
+})
+
+const filterTypes = [
+  { text: 'all', icon: 'mdi mdi-all-inclusive text-success fs-2' },
+  { text: 'concert', icon: 'mdi mdi-guitar-electric text-danger fs-2' },
+  { text: 'convention', icon: 'mdi mdi-account-group text-primary fs-2' },
+  { text: 'sport', icon: 'mdi mdi-soccer text-info fs-2' },
+  { text: 'digital', icon: 'mdi mdi-desktop-classic text-warning-emphasis fs-2' }
+]
 
 onMounted(() => {
   getAllEvents()
@@ -19,6 +34,7 @@ async function getAllEvents() {
   }
   catch (error) {
     Pop.meow(error);
+    logger.error(error)
   }
 }
 </script>
@@ -52,8 +68,17 @@ async function getAllEvents() {
         </div>
       </div>
     </section>
-    <section class="row mx-2 mx-md-5">
+    <section class="row mx-2 mx-md-5 justify-content-between">
       <h5>Explore top categories</h5>
+      <div v-for="filter in filterTypes" :key="filter.text" class="col-6 col-md-2 my-3">
+        <button @click="filterBy = filter.text" type="button" class="filter w-100 selectable">
+          <div class="p-3">
+            <i :class="filter.icon"></i>
+            <br>
+            <span class="text-center">{{ filter.text }}</span>
+          </div>
+        </button>
+      </div>
     </section>
     <section class="row mx-2 mx-md-5 g-3 mb-5">
       <h5>Upcoming Events</h5>
@@ -76,5 +101,9 @@ async function getAllEvents() {
 
 .text-shadow {
   text-shadow: 2px 2px 5px #000000;
+}
+
+.filter {
+  font-weight: 500;
 }
 </style>
