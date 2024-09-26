@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState';
+import EventForm from '@/components/globals/EventForm.vue';
 import { eventsService } from '@/services/EventsService';
 import Pop from '@/utils/Pop';
 import { computed, onMounted } from 'vue';
@@ -45,6 +46,7 @@ async function getAllEvents() {
         </div>
       </div>
     </section>
+    <EventForm />
     <section class="row mx-2 mx-md-5">
       <h5>Explore top categories</h5>
     </section>
