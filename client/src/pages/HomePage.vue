@@ -1,6 +1,8 @@
 <script setup>
 import { AppState } from '@/AppState';
+import EventCard from '@/components/globals/EventCard.vue';
 import EventForm from '@/components/globals/EventForm.vue';
+import ModalWrapper from '@/components/globals/ModalWrapper.vue';
 import { eventsService } from '@/services/EventsService';
 import Pop from '@/utils/Pop';
 import { computed, onMounted } from 'vue';
@@ -23,6 +25,9 @@ async function getAllEvents() {
 
 <template>
   <div class="container-fluid p-0">
+    <ModalWrapper id="event-form">
+      <EventForm />
+    </ModalWrapper>
     <section class="row m-0 img-fluid splash align-items-center px-md-5"
       style="background-image: url(https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);">
       <div class="col-md-6 text-white text-shadow">
@@ -42,11 +47,11 @@ async function getAllEvents() {
         <div>
           <h6>Start an event</h6>
           <p>Create your own Tower event, and draw from a community of millions</p>
-          <span class="text-success selectable" role="button">Create an event</span>
+          <span class="text-success selectable" role="button" data-bs-toggle="modal" data-bs-target="#event-form">Create
+            an event</span>
         </div>
       </div>
     </section>
-    <EventForm />
     <section class="row mx-2 mx-md-5">
       <h5>Explore top categories</h5>
     </section>

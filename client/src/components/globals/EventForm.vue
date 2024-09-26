@@ -2,11 +2,10 @@
 import { eventsService } from '@/services/EventsService';
 import { logger } from '@/utils/Logger';
 import Pop from '@/utils/Pop';
+import { Modal } from 'bootstrap';
 import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-
-const route = useRoute()
 const router = useRouter()
 
 const filters = ['concert', 'convention', 'sport', 'digital']
@@ -25,6 +24,8 @@ async function createEvent() {
     const createdEvent = await eventsService.createEvent(eventData.value)
     resetForm()
     Pop.toast(`${createdEvent.name} Created!`, 'success', 'top')
+    Modal.getOrCreateInstance('#event-form').hide()
+    router.push({ name: 'Event Details', params: { eventId: createdEvent.id } })
   }
   catch (error) {
     Pop.meow(error);
@@ -47,15 +48,18 @@ function resetForm() {
 
 
 <template>
-  <form @submit.prevent="createEvent()" class="row m-0">
-    <div class="col-12 mb-5">
+  <form @submit.prevent="createEvent()" class="row m-0 p-4">
+    <div class="col-12 mb-4 p-0">
       <h2>Create New Event</h2>
     </div>
-    <div class="mb-3 col-md-8 ps-0">
+    <div class="col-md-6 p-0 pe-2">
       <label class="" for="">Image Preview</label>
+      <div class="d-flex justify-content-center align-items-center alice img-preview">
+        <i class="mdi mdi-image fs-1"></i>
+      </div>
     </div>
-    <div class="mb-3 col-md-4">
-      <div class="mb-2 row">
+    <div class="col-md-6 align-self-end">
+      <div class="my-2 mt-md-0 row">
         <label class="" for="eventName">Event Name</label>
         <input v-model="eventData.name" required class="form-control" type="text" minlength="3" maxlength="50"
           name="eventName" id="eventName" placeholder="Name...">
@@ -72,32 +76,32 @@ function resetForm() {
           <option v-for="filter in filters" :key="filter" :value="filter">{{ filter }}</option>
         </select>
       </div>
-      <div class="mb-2 row gap-3">
-        <div class="col-8 p-0">
+      <div class="mb-2 row">
+        <div class="col-8 mb-2 mb-md-0 ps-0">
           <label for="eventDate">Start Date</label>
           <input v-model="eventData.startDate" required class="form-control" type="date" id="eventDate"
             name="eventDate">
         </div>
-        <div class="col p-0">
+        <div class="col-4 p-0">
           <label for="eventCapacity">Capacity</label>
           <input v-model="eventData.capacity" required class="form-control" type="number" min="3" max="5000"
             name="eventCapacity" id="eventCapacity" placeholder="0">
         </div>
       </div>
-      <div class="mb-2 row">
+      <div class="mb-2 mb-md-0 row">
         <label class="" for="eventImg">Image Url</label>
         <input v-model="eventData.coverImg" required class="form-control" type="url" minlength="3" maxlength="500"
           name="eventImg" id="eventImg" placeholder="URL...">
       </div>
     </div>
-    <div class="mb-2 row m-0 p-0">
+    <div class="mt-md-4 mb-3 p-0">
       <label class="" for="eventDesc">Event Description</label>
       <textarea v-model="eventData.description" required class="form-control" name="eventDesc" id="eventDesc"
-        minlength="15" maxlength="1000" placeholder="Tell us more about your event..."></textarea>
+        minlength="15" maxlength="1000" rows="5" placeholder="Tell us more about your event..."></textarea>
     </div>
 
-    <div class="mb-2 p-0">
-      <button class="w-100 p-2">Create Event</button>
+    <div class="d-flex p-0 justify-content-end">
+      <button class="btn alice p-2 selectable" type="submit">Create Event</button>
     </div>
   </form>
 </template>
@@ -106,5 +110,20 @@ function resetForm() {
 <style lang="scss" scoped>
 label {
   padding-left: .75em;
+}
+
+.alice {
+  border: 2px solid rgb(146, 204, 255);
+}
+
+.alice,
+.form-control {
+  background-color: aliceblue;
+}
+
+.img-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: grey dashed;
 }
 </style>
