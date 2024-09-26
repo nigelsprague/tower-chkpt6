@@ -15,8 +15,7 @@ export class Event {
   }
 
   get eventDate() {
-    const eventDay = new Date(this.startDate).toDateString()
-    const eventTime = new Date(this.startDate).toLocaleTimeString()
-    return eventDay + ' at ' + eventTime
+    const eventDay = new Date(this.startDate).toUTCString()
+    return eventDay
   }
 }

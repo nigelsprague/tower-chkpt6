@@ -4,6 +4,12 @@ import { Event } from "@/models/Event"
 import { AppState } from "@/AppState"
 
 class EventsService {
+  async createEvent(eventData) {
+    const res = await api.post('api/events', eventData)
+    const createdEvent = new Event(res.data)
+    AppState.towerEvents.push(createdEvent)
+    return createdEvent
+  }
   async getEventById(eventId) {
     const res = await api.get(`api/events/${eventId}`)
     logger.log(res.data)
