@@ -15,8 +15,8 @@ export class Event {
   }
 
   get eventDate() {
-    const eventMonth = new Date(this.startDate).toLocaleDateString()
-    // const eventDay = new Date(this.startDate).getDay()
-    return eventMonth
+    const eventDay = new Date(this.startDate).toLocaleDateString()
+    const eventTime = new Date(this.startDate).toLocaleTimeString()
+    return eventDay + ' at ' + eventTime
   }
 }

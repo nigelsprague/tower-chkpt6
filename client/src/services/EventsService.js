@@ -4,6 +4,11 @@ import { Event } from "@/models/Event"
 import { AppState } from "@/AppState"
 
 class EventsService {
+  async getEventById(eventId) {
+    const res = await api.get(`api/events/${eventId}`)
+    logger.log(res.data)
+    AppState.activeEvent = new Event(res.data)
+  }
   async getAllEvents() {
     const res = await api.get('api/events')
     logger.log(res.data)
