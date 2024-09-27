@@ -5,8 +5,9 @@ import { AppState } from "@/AppState"
 
 class EventsService {
   async cancelEvent(eventId) {
-    // const res = this.getEventById(eventId)
-    
+    const res = await api.delete(`api/events/${eventId}`)
+    logger.log(res.data)
+    AppState.activeEvent.isCanceled = !AppState.activeEvent.isCanceled
   }
   async createEvent(eventData) {
     const res = await api.post('api/events', eventData)

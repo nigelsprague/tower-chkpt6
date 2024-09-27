@@ -36,7 +36,7 @@ class EventsService {
   }
   async createEvent(eventData) {
     const towerEvent = await dbContext.TowerEvents.create(eventData)
-    // REVIEW populates after create
+    await towerEvent.populate('creator')
     return towerEvent
   }
 

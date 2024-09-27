@@ -20,8 +20,8 @@ const filterTypes = [
   { text: 'all', icon: 'mdi mdi-all-inclusive text-success fs-2' },
   { text: 'concert', icon: 'mdi mdi-guitar-electric text-danger fs-2' },
   { text: 'convention', icon: 'mdi mdi-account-group text-primary fs-2' },
-  { text: 'sport', icon: 'mdi mdi-soccer text-info fs-2' },
-  { text: 'digital', icon: 'mdi mdi-desktop-classic text-warning-emphasis fs-2' }
+  { text: 'sport', icon: 'mdi mdi-soccer text-warning-emphasis fs-2' },
+  { text: 'digital', icon: 'mdi mdi-desktop-classic text-info fs-2' }
 ]
 
 onMounted(() => {
