@@ -4,6 +4,10 @@ import { Event } from "@/models/Event"
 import { AppState } from "@/AppState"
 
 class EventsService {
+  async cancelEvent(eventId) {
+    // const res = this.getEventById(eventId)
+    
+  }
   async createEvent(eventData) {
     const res = await api.post('api/events', eventData)
     const createdEvent = new Event(res.data)

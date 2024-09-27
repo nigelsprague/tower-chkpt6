@@ -1,6 +1,8 @@
 <script setup>
 import { AppState } from '@/AppState';
 import { eventsService } from '@/services/EventsService';
+import { logger } from '@/utils/Logger';
+import Pop from '@/utils/Pop';
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -10,6 +12,7 @@ onMounted(() => {
 
 const route = useRoute()
 const towerEvent = computed(() => AppState.activeEvent)
+const user = computed(() => AppState.account)
 
 const canAttend = computed(() => {
   if (AppState.activeEvent.isCanceled == true) return false
@@ -19,7 +22,22 @@ const canAttend = computed(() => {
 })
 
 async function getEventById() {
-  await eventsService.getEventById(route.params.eventId)
+  try {
+    await eventsService.getEventById(route.params.eventId)
+  } catch (error) {
+    Pop.meow(error)
+    logger.error(error)
+  }
+}
+
+async function cancelEvent() {
+  try {
+    await eventsService.cancelEvent(route.params.eventId)
+  }
+  catch (error) {
+    Pop.meow(error)
+    logger.error(error)
+  }
 }
 </script>
 
@@ -45,8 +63,19 @@ async function getEventById() {
               </span>
               <span v-if="towerEvent.isCanceled" class="bg-danger text-white px-2 rounded-pill">Cancelled</span>
             </div>
-            <div class="col text-end">
+            <button class="btn text-end">
               <i class="mdi mdi-dots-horizontal fs-3 p-0"></i>
+            </button>
+            <div v-if="user.id == towerEvent.creatorId" class="dropdown">
+              <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-dots-horizontal fs-3"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <!-- <li><button @click="editEvent()" class="dropdown-item" data-bs-toggle="modal"
+              data-bs-target="#editModal" type="button">Edit event</button></li> -->
+                <li><button @click="cancelEvent()" class="dropdown-item text-danger" type="button">Cancel Event</button>
+                </li>
+              </ul>
             </div>
           </div>
           <div class="my-2 text-secondary">
