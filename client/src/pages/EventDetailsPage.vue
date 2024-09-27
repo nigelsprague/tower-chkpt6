@@ -1,6 +1,7 @@
 <script setup>
 import { AppState } from '@/AppState';
 import { eventsService } from '@/services/EventsService';
+import { ticketsService } from '@/services/TicketsService';
 import { logger } from '@/utils/Logger';
 import Pop from '@/utils/Pop';
 import { computed, onMounted } from 'vue';
@@ -8,15 +9,29 @@ import { useRoute } from 'vue-router';
 
 onMounted(() => {
   getEventById()
+  getTicketHolders()
 })
 
 const route = useRoute()
 const towerEvent = computed(() => AppState.activeEvent)
 const user = computed(() => AppState.account)
+const ticketHolder = computed(() => AppState.attendingProfiles)
+
+const spotsLeft = computed(() => AppState.activeEvent.capacity - AppState.activeEvent.ticketCount)
+
+const holdingTicket = computed(() => {
+  if (AppState.identity == null) return false
+  const youInTicketHolders = AppState.attendingProfiles.find(ticket => ticket.accountId == AppState.account?.id)
+  if (!youInTicketHolders) return false
+  return true
+})
+
+const soldOut = computed(() => towerEvent.value.ticketCount == towerEvent.value.capacity)
 
 const canAttend = computed(() => {
-  if (AppState.activeEvent.isCanceled == true) return false
-  //NOTE - if attendee.length == capacity and make it sold out
+  if (AppState.activeEvent?.isCanceled == true) return false
+  if (soldOut.value) return false
+  if (holdingTicket.value) return false
   if (AppState.identity == null) return false
   return true
 })
@@ -26,6 +41,16 @@ async function getEventById() {
     await eventsService.getEventById(route.params.eventId)
   } catch (error) {
     Pop.meow(error)
+    logger.error(error)
+  }
+}
+
+async function getTicketHolders() {
+  try {
+    await ticketsService.getTicketHolders(route.params.eventId)
+  }
+  catch (error) {
+    Pop.meow(error);
     logger.error(error)
   }
 }
@@ -62,6 +87,7 @@ async function cancelEvent() {
                 {{ towerEvent.type }}
               </span>
               <span v-if="towerEvent.isCanceled" class="bg-danger text-white px-2 rounded-pill">Cancelled</span>
+              <span v-if="soldOut" class="bg-danger text-white px-2 rounded-pill">Sold Out</span>
             </div>
             <div v-if="user.id == towerEvent.creatorId" class="dropdown">
               <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -92,8 +118,27 @@ async function cancelEvent() {
         </div>
 
         <div class="col-md-4">
+          <div class="card text-center p-3 mb-1">
+            <h5>Interested in going?</h5>
+            <h6 class="text-secondary">Grab a ticket!</h6>
+            <button :disabled="!canAttend" class="btn bg-primary text-white selectable">
+              <span v-if="!holdingTicket">Attend</span>
+              <span v-else>Unattend</span>
+            </button>
+          </div>
+          <h6 class="text-end">
+            <span v-if="(spotsLeft >= 10)" class="text-success">{{ spotsLeft }}</span>
+            <span v-else class="text-danger">{{ spotsLeft }}</span>
+            spots left!
+          </h6>
+          <h5>Attendees</h5>
           <div class="card">
-            woo
+            <div class="row m-0 p-2">
+              <div v-for="attendee in ticketHolder" :key="attendee.profile.id" class="d-flex ticket-holder">
+                <img :src="attendee.profile.picture" alt="">
+                <p>{{ attendee.profile.name }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -123,5 +168,10 @@ img {
   object-fit: contain;
   height: 45dvh;
   width: max-content;
+}
+
+.ticket-holder {
+  border-left: 3px solid slateblue;
+
 }
 </style>
