@@ -1,8 +1,9 @@
+import { AppState } from "@/AppState"
 import { Account } from "./Account"
 
 export class Event {
-  // /**@type {Account} */
-  // creator
+  /**@type {Account} */
+  creator
   constructor(data) {
     this.id = data.id
     this.name = data.name
@@ -14,7 +15,7 @@ export class Event {
     this.isCanceled = data.isCanceled
     this.type = data.type
     this.creatorId = data.creatorId
-    // this.creator = new Account(data.creator)
+    this.creator = new Account(data.creator || AppState.account || {})
     this.createdAt = new Date(data.createdAt)
     this.updatedAt = new Date(data.updatedAt)
   }

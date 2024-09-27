@@ -15,7 +15,7 @@ defineProps({
       <img class="card-img-top cover-img" :src="eventProp.coverImg" :alt="eventProp.name">
       <div class="card-body px-4">
         <span class="fw-bold row">{{ eventProp.name }}</span>
-        <!-- <span class="text-success row">Hosted by {{ eventProp.creator.name }}</span> -->
+        <span class="text-success row">Hosted by {{ eventProp.creator.name }}</span>
         <span class="text-tertiary row my-1">{{ eventProp.eventDate + ' - ' + eventProp.location }}</span>
         <span class="text-secondary row"># attending</span>
       </div>

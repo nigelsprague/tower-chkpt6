@@ -63,9 +63,6 @@ async function cancelEvent() {
               </span>
               <span v-if="towerEvent.isCanceled" class="bg-danger text-white px-2 rounded-pill">Cancelled</span>
             </div>
-            <button class="btn text-end">
-              <i class="mdi mdi-dots-horizontal fs-3 p-0"></i>
-            </button>
             <div v-if="user.id == towerEvent.creatorId" class="dropdown">
               <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="mdi mdi-dots-horizontal fs-3"></i>

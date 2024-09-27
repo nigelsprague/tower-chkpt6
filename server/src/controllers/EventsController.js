@@ -13,6 +13,8 @@ export class EventsController extends BaseController {
       .post('', this.createEvent)
       .put('/:eventId', this.editEvent)
       .delete('/:eventId', this.cancelEvent)
+    // TODO get event comments
+    // TODO get event tickets
   }
   async cancelEvent(req, res, nxt) {
     try {

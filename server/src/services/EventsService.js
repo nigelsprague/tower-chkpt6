@@ -20,21 +20,23 @@ class EventsService {
     eventToUpdate.location = eventData.location ?? eventToUpdate.location
     eventToUpdate.capacity = eventData.capacity ?? eventToUpdate.capacity
     eventToUpdate.startDate = eventData.startDate ?? eventToUpdate.startDate
-    eventToUpdate.isCanceled = eventData.isCanceled ?? eventToUpdate.isCanceled
+    // REVIEW should not be here since we use the cancelEvent from above
+    // eventToUpdate.isCanceled = eventData.isCanceled ?? eventToUpdate.isCanceled
     eventToUpdate.type = eventData.type ?? eventToUpdate.type
     await eventToUpdate.save()
     return eventToUpdate
   }
   async getEventById(eventId) {
-    const towerEvent = await dbContext.TowerEvents.findById(eventId)
+    const towerEvent = await dbContext.TowerEvents.findById(eventId).populate('creator').populate('ticketCount')
     return towerEvent
   }
   async getAllEvents() {
-    const towerEvents = await dbContext.TowerEvents.find()
+    const towerEvents = await dbContext.TowerEvents.find().populate('creator').populate('ticketCount')
     return towerEvents
   }
   async createEvent(eventData) {
     const towerEvent = await dbContext.TowerEvents.create(eventData)
+    // REVIEW populates after create
     return towerEvent
   }
 

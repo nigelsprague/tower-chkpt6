@@ -4,6 +4,8 @@ import { AppState } from '../AppState.js';
 
 const account = computed(() => AppState.account)
 
+// TODO get all of your tickets, reference art terminal 
+
 </script>
 
 <template>
