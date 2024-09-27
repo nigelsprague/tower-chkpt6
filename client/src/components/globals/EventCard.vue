@@ -17,7 +17,7 @@ defineProps({
         <span class="fw-bold row">{{ eventProp.name }}</span>
         <span class="text-success row">Hosted by {{ eventProp.creator.name }}</span>
         <span class="text-tertiary row my-1">{{ eventProp.eventDate + ' - ' + eventProp.location }}</span>
-        <span class="text-secondary row"># attending</span>
+        <span class="text-secondary row">{{ eventProp.ticketCount }} attending</span>
       </div>
     </div>
   </RouterLink>

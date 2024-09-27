@@ -15,6 +15,7 @@ export class Event {
     this.isCanceled = data.isCanceled
     this.type = data.type
     this.creatorId = data.creatorId
+    this.ticketCount = data.ticketCount
     this.creator = new Account(data.creator || AppState.account || {})
     this.createdAt = new Date(data.createdAt)
     this.updatedAt = new Date(data.updatedAt)

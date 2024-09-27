@@ -53,13 +53,13 @@ async function getAllEvents() {
         </p>
       </div>
     </section>
-    <section class="row justify-content-evenly mx-2 mx-md-5">
+    <section class="row justify-content-evenly mx-2 mx-md-5 g-3">
       <h5>How Tower works</h5>
-      <div class="col-5 d-flex bg-white p-3">
+      <div class="col-md-5 d-flex bg-white p-3">
         <h6>Discover</h6>
       </div>
-      <div class="col-5 d-flex bg-white p-3">
-        <i class="mdi mdi-plus text-success fs-2 me-2"></i>
+      <div class="col-md-5 d-flex bg-white p-3">
+        <i class="mdi mdi-plus text-success fs-2 me-1"></i>
         <div>
           <h6>Start an event</h6>
           <p>Create your own Tower event, and draw from a community of millions</p>
@@ -92,7 +92,7 @@ async function getAllEvents() {
 <style scoped lang="scss">
 .splash {
   width: 100vw;
-  height: 90dvh;
+  height: 94dvh;
   background-size: cover;
   background-position: center;
   filter: contrast(.75);
