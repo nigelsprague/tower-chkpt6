@@ -1,6 +1,7 @@
 import { Auth0Provider } from "@bcwdev/auth0provider";
 import BaseController from "../utils/BaseController";
 import { eventsService } from "../services/EventsService";
+import { request } from "express";
 
 export class EventsController extends BaseController {
   constructor() {
@@ -10,6 +11,32 @@ export class EventsController extends BaseController {
       .get('/:eventId', this.getEventById)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.createEvent)
+      .put('/:eventId', this.editEvent)
+      .delete('/:eventId', this.cancelEvent)
+  }
+  async cancelEvent(req, res, nxt) {
+    try {
+      const eventId = req.params.eventId
+      const userId = req.userInfo.id
+      const message = await eventsService.cancelEvent(eventId, userId)
+      res.send(message)
+    }
+    catch (error) {
+      nxt(error);
+    }
+  }
+
+  async editEvent(req, res, nxt) {
+    try {
+      const eventId = req.params.eventId
+      const eventData = req.body
+      const user = req.userInfo
+      const towerEvent = await eventsService.editEvent(eventId, eventData, user.id)
+      res.send(towerEvent)
+    }
+    catch (error) {
+      nxt(error);
+    }
   }
 
   async getAllEvents(req, res, nxt) {

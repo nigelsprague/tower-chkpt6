@@ -11,6 +11,13 @@ onMounted(() => {
 const route = useRoute()
 const towerEvent = computed(() => AppState.activeEvent)
 
+const canAttend = computed(() => {
+  if (AppState.activeEvent.isCanceled == true) return false
+  //NOTE - if attendee.length == capacity and make it sold out
+  if (AppState.identity == null) return false
+  return true
+})
+
 async function getEventById() {
   await eventsService.getEventById(route.params.eventId)
 }
@@ -31,11 +38,12 @@ async function getEventById() {
       <section class="row m-0 p-0">
         <div class="col-md-8">
           <div class="d-flex justify-content-between">
-            <div class="d-flex align-items-center">
-              <h2 class="me-1">{{ towerEvent.name }}</h2>
+            <div class="d-flex align-items-center gap-2">
+              <h2 class="">{{ towerEvent.name }}</h2>
               <span class="rounded-pill bg-dark-subtle text-white px-2">
                 {{ towerEvent.type }}
               </span>
+              <span v-if="towerEvent.isCanceled" class="bg-danger text-white px-2 rounded-pill">Cancelled</span>
             </div>
             <div class="col text-end">
               <i class="mdi mdi-dots-horizontal fs-3 p-0"></i>
