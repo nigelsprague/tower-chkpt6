@@ -18,6 +18,6 @@ export class TicketProfile extends Ticket {
 export class TicketEvent extends Ticket {
   constructor(data) {
     super(data)
-    this.towerEvent = new Event(data.towerEvent)
+    this.towerEvent = new Event(data.event)
   }
 }

@@ -31,7 +31,6 @@ const soldOut = computed(() => towerEvent.value.ticketCount == towerEvent.value.
 const canAttend = computed(() => {
   if (AppState.activeEvent?.isCanceled == true) return false
   if (soldOut.value) return false
-  if (holdingTicket.value) return false
   if (AppState.identity == null) return false
   return true
 })
@@ -64,6 +63,19 @@ async function cancelEvent() {
     logger.error(error)
   }
 }
+
+async function createTicket() {
+  try {
+    const ticketData = { eventId: route.params.eventId }
+    await ticketsService.createTicket(ticketData)
+  }
+  catch (error) {
+    Pop.meow(error);
+    logger.error(error)
+  }
+}
+
+
 </script>
 
 
@@ -118,12 +130,18 @@ async function cancelEvent() {
         </div>
 
         <div class="col-md-4">
+          <div v-if="holdingTicket" class="d-flex">
+            <span class="text-success mb-1">You have a ticket</span>
+          </div>
           <div class="card text-center p-3 mb-1">
             <h5>Interested in going?</h5>
             <h6 class="text-secondary">Grab a ticket!</h6>
-            <button :disabled="!canAttend" class="btn bg-primary text-white selectable">
-              <span v-if="!holdingTicket">Attend</span>
-              <span v-else>Unattend</span>
+            <button v-if="!holdingTicket" @click="createTicket()" :disabled="!canAttend"
+              class="btn bg-primary text-white selectable">
+              <span>Attend</span>
+            </button>
+            <button v-else :disabled="!canAttend" class="btn bg-primary text-white selectable">
+              <span>Unattend</span>
             </button>
           </div>
           <h6 class="text-end">
@@ -133,10 +151,11 @@ async function cancelEvent() {
           </h6>
           <h5>Attendees</h5>
           <div class="card">
-            <div class="row m-0 p-2">
-              <div v-for="attendee in ticketHolder" :key="attendee.profile.id" class="d-flex ticket-holder">
-                <img :src="attendee.profile.picture" alt="">
-                <p>{{ attendee.profile.name }}</p>
+            <div class="row m-0 mt-2 p-2">
+              <div v-for="attendee in ticketHolder" :key="attendee.profile.id"
+                class="d-flex ticket-holder align-items-center mb-2">
+                <img class="img-fluid profile-img" :src="attendee.profile.picture" alt="">
+                <p class="m-0 px-2">{{ attendee.profile.name }}</p>
               </div>
             </div>
           </div>
@@ -172,6 +191,11 @@ img {
 
 .ticket-holder {
   border-left: 3px solid slateblue;
+}
 
+.profile-img {
+  height: 23px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
 }
 </style>
