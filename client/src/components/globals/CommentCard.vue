@@ -18,4 +18,11 @@ defineProps({ commentProp: { type: Comment, required: true } })
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.profile-img {
+  height: 30px;
+  object-fit: cover;
+  object-position: center;
+  aspect-ratio: 1 / 1;
+}
+</style>

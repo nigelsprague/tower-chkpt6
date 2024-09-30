@@ -158,23 +158,15 @@ async function getCommentsByEvent() {
           </div>
           <h4>See what folks are saying...</h4>
           <form @submit.prevent="createComment()" class="mb-2">
-            <label class="form-label" for="comment">Share your thoughts</label>
+            <label class="form-label text-" for="comment">Share your thoughts</label>
             <div class="d-flex justify-content-between">
               <input v-model="editablecommentData" class="form-control" type="text" name="comment" id="comment"
                 maxlength="500">
               <button class="btn bg-success text-light" type="submit">Post</button>
             </div>
           </form>
-          <div v-for="comment in comments" :key="comment.id">
-            <div class="card p-1 mb2">
-              <div class="d-flex align-items-center">
-                <img class="img-fluid profile-img mx-2" :src="comment.creator.picture" alt="">
-                <div>
-                  <h6 class="m-0">{{ comment.creator.name }}</h6>
-                  <p class="m-0">{{ comment.body }}</p>
-                </div>
-              </div>
-            </div>
+          <div v-for="comment in comments" :key="comment.id" class="mb-2">
+            <CommentCard :comment-prop="comment" />
           </div>
         </div>
 
