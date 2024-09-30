@@ -33,7 +33,7 @@ async function getAccountTickets() {
 
 async function deleteTicket(ticketId) {
   try {
-    const confirmed = await Pop.confirm("Are you sure you want to give up your ticket?")
+    const confirmed = await Pop.confirm('Are you sure you want to give up your ticket?', 'No takesy backsies')
     if (!confirmed) return
     await ticketsService.deleteTicket(ticketId)
     Pop.success('Ticket deleted')

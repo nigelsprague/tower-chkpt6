@@ -11,8 +11,8 @@ import { useRoute } from 'vue-router';
 
 onMounted(() => {
   getEventById()
-  getTicketHolders()
   getCommentsByEvent()
+  getTicketHolders()
 })
 
 const route = useRoute()
@@ -80,7 +80,8 @@ async function createTicket() {
 }
 
 const editablecommentData = ref({
-  body: ''
+  body: '',
+  eventId: route.params.eventId
 })
 
 async function createComment() {
@@ -88,7 +89,8 @@ async function createComment() {
     const commentData = editablecommentData.value
     await commentsService.createComment(commentData)
     editablecommentData.value = {
-      body: ''
+      body: '',
+      eventId: route.params.eventId
     }
   }
   catch (error) {
@@ -155,7 +157,7 @@ async function getCommentsByEvent() {
             <p><i class="mdi mdi-map-marker text-info me-2"></i>{{ towerEvent.location }}</p>
           </div>
           <h4>See what folks are saying...</h4>
-          <form @submit.prevent="createComment()">
+          <form @submit.prevent="createComment()" class="mb-2">
             <label class="form-label" for="comment">Share your thoughts</label>
             <div class="d-flex justify-content-between">
               <input v-model="editablecommentData" class="form-control" type="text" name="comment" id="comment"
@@ -164,7 +166,15 @@ async function getCommentsByEvent() {
             </div>
           </form>
           <div v-for="comment in comments" :key="comment.id">
-            <CommentCard :comment-prop="comment" />
+            <div class="card p-1 mb2">
+              <div class="d-flex align-items-center">
+                <img class="img-fluid profile-img mx-2" :src="comment.creator.picture" alt="">
+                <div>
+                  <h6 class="m-0">{{ comment.creator.name }}</h6>
+                  <p class="m-0">{{ comment.body }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

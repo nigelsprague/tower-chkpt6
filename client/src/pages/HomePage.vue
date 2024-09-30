@@ -70,7 +70,7 @@ async function getAllEvents() {
     </section>
     <section class="row mx-2 mx-md-5 justify-content-between">
       <h5>Explore top categories</h5>
-      <div v-for="filter in filterTypes" :key="filter.text" class="col-6 col-md-2 my-3">
+      <div v-for="filter in filterTypes" :key="filter.text" class="col-6 col-lg-2 my-3">
         <button @click="filterBy = filter.text" type="button" class="filter w-100 selectable">
           <div class="p-3">
             <i :class="filter.icon"></i>

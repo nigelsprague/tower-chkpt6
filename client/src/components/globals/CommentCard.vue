@@ -1,20 +1,16 @@
 <script setup>
 import { Comment } from '@/models/Comment';
 
-defineProps({
-  commentProp: { type: Comment, required: true }
-})
-
-
+defineProps({ commentProp: { type: Comment, required: true } })
 </script>
 
 
 <template>
-  <div class="card">
-    <div class="d-flex align-items-center mb-2">
-      <img class="img-fluid profile-img" :src="commentProp.creator.picture" alt="">
+  <div class="card p-1 mb2">
+    <div class="d-flex align-items-center">
+      <img class="img-fluid profile-img mx-2" :src="commentProp.creator.picture" alt="">
       <div>
-        <p class="m-0 px-2">{{ commentProp.creator.name }}</p>
+        <h6 class="m-0">{{ commentProp.creator.name }}</h6>
         <p class="m-0">{{ commentProp.body }}</p>
       </div>
     </div>

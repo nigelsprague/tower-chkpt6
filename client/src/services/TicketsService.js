@@ -26,6 +26,7 @@ class TicketsService{
   }
 
   async getTicketHolders(eventId) {
+    AppState.attendingProfiles = []
     const res = await api.get(`api/events/${eventId}/tickets`)
     const ticketHolders = res.data.map(ticketData => new TicketProfile(ticketData))
     AppState.attendingProfiles = ticketHolders
