@@ -6,7 +6,7 @@ import { eventsService } from '@/services/EventsService';
 import { ticketsService } from '@/services/TicketsService';
 import { logger } from '@/utils/Logger';
 import Pop from '@/utils/Pop';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 onMounted(() => {
@@ -79,19 +79,15 @@ async function createTicket() {
   }
 }
 
-const editablecommentData = ref({
+const commentData = ref({
   body: '',
-  eventId: route.params.eventId
+  eventId: null
 })
 
 async function createComment() {
   try {
-    const commentData = editablecommentData.value
-    await commentsService.createComment(commentData)
-    editablecommentData.value = {
-      body: '',
-      eventId: route.params.eventId
-    }
+    commentData.value.eventId = AppState.activeEvent.id
+    await commentsService.createComment(commentData.value)
   }
   catch (error) {
     Pop.meow(error);
@@ -160,7 +156,7 @@ async function getCommentsByEvent() {
           <form @submit.prevent="createComment()" class="mb-2">
             <label class="form-label text-" for="comment">Share your thoughts</label>
             <div class="d-flex justify-content-between">
-              <input v-model="editablecommentData" class="form-control" type="text" name="comment" id="comment"
+              <input v-model="commentData.body" class="form-control me-1" type="text" name="comment" id="comment"
                 maxlength="500">
               <button class="btn bg-success text-light" type="submit">Post</button>
             </div>
@@ -196,7 +192,7 @@ async function getCommentsByEvent() {
               <div v-for="attendee in ticketHolder" :key="attendee.profile.id"
                 class="d-flex ticket-holder align-items-center mb-2">
                 <img class="img-fluid profile-img" :src="attendee.profile.picture" alt="">
-                <p class="m-0 px-2">{{ attendee.profile.name }}</p>
+                <h6 class="m-0 px-2">{{ attendee.profile.name }}</h6>
               </div>
             </div>
           </div>
@@ -235,7 +231,7 @@ img {
 }
 
 .profile-img {
-  height: 23px;
+  height: 30px;
   aspect-ratio: 1/1;
   border-radius: 50%;
 }

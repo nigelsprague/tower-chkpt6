@@ -13,8 +13,8 @@ class CommentsService {
 
   async createComment(commentData) {
     const res = await api.post('api/comments', commentData)
-    const newcomment = new Comment(res.data)
-    AppState.comments.unshift(newcomment)
+    const createdComment = new Comment(res.data)
+    AppState.comments.push(createdComment)
   }
 
 }
