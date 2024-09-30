@@ -16,8 +16,7 @@ export class Event {
     this.type = data.type
     this.creatorId = data.creatorId
     this.ticketCount = data.ticketCount
-    // this.creator = new Account(data.creator || AppState.account || {})
-    this.creator = data.creator ? new Account(data.creator) : null
+    this.creator = new Account(data.creator || AppState.account || {})
     this.createdAt = new Date(data.createdAt)
     this.updatedAt = new Date(data.updatedAt)
   }

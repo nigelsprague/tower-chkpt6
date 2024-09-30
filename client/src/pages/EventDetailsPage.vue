@@ -130,19 +130,19 @@ async function createTicket() {
         </div>
 
         <div class="col-md-4">
-          <div v-if="holdingTicket" class="d-flex">
-            <span class="text-success mb-1">You have a ticket</span>
-          </div>
           <div class="card text-center p-3 mb-1">
-            <h5>Interested in going?</h5>
-            <h6 class="text-secondary">Grab a ticket!</h6>
-            <button v-if="!holdingTicket" @click="createTicket()" :disabled="!canAttend"
-              class="btn bg-primary text-white selectable">
-              <span>Attend</span>
-            </button>
-            <button v-else :disabled="!canAttend" class="btn bg-primary text-white selectable">
-              <span>Unattend</span>
-            </button>
+            <div v-if="!holdingTicket">
+              <h5>Interested in going?</h5>
+              <h6 class="text-secondary">Grab a ticket!</h6>
+              <button v-if="!holdingTicket" @click="createTicket()" :disabled="!canAttend"
+                class="btn bg-primary text-white selectable">
+                <span>Attend</span>
+              </button>
+            </div>
+            <div v-else>
+              <h5>You have a ticket for this event!</h5>
+              <i class="mdi mdi-ticket fs-1 text-success"></i>
+            </div>
           </div>
           <h6 class="text-end">
             <span v-if="(spotsLeft >= 10)" class="text-success">{{ spotsLeft }}</span>

@@ -8,15 +8,15 @@ export class AccountController extends BaseController {
     super('account')
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
+      .get('/tickets', this.getMyTickets)
       .get('', this.getUserAccount)
       .put('', this.editUserAccount)
-      .get('/tickets', this.getMyTickets)
     // TODO get tickets by account
   }
   async getMyTickets(req, res, nxt) {
     try {
-      const userId = req.userInfo.id
-      const tickets = await ticketsService.getMyTickets(userId)
+      const user = req.userInfo
+      const tickets = await ticketsService.getMyTickets(user.id)
       res.send(tickets)
     } catch (error) {
       nxt(error)

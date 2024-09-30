@@ -3,6 +3,7 @@ import BaseController from "../utils/BaseController";
 import { eventsService } from "../services/EventsService";
 import { request } from "express";
 import { ticketsService } from "../services/TicketsService";
+import { commentsService } from "../services/CommentsServices";
 
 export class EventsController extends BaseController {
   constructor() {
@@ -10,12 +11,12 @@ export class EventsController extends BaseController {
     this.router
       .get('', this.getAllEvents)
       .get('/:eventId', this.getEventById)
+      .get('/:eventId/comments', this.getCommentsByEvent)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('/:eventId/tickets', this.getTicketsByEvent)
       .post('', this.createEvent)
       .put('/:eventId', this.editEvent)
       .delete('/:eventId', this.cancelEvent)
-    // TODO get event comments
   }
   async getTicketsByEvent(req, res, nxt) {
     try {
@@ -80,6 +81,16 @@ export class EventsController extends BaseController {
     }
     catch (error) {
       nxt(error);
+    }
+  }
+
+  async getCommentsByEvent(req, res, nxt) {
+    try {
+      const eventId = req.params.eventId
+      const comments = await commentsService.getComments(eventId)
+      res.send(comments)
+    } catch (error) {
+      nxt(error)
     }
   }
 }

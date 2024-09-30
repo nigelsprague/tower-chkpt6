@@ -14,6 +14,9 @@ class EventsService {
     if (eventToUpdate.creatorId != userId) {
       throw new Forbidden("You cannot edit another user's event");
     }
+    if (eventToUpdate.isCanceled == true) {
+      throw new Error('Cannot edit a cancelled event');
+    }
     eventToUpdate.name = eventData.name ?? eventToUpdate.name
     eventToUpdate.description = eventData.description ?? eventToUpdate.description
     eventToUpdate.coverImg = eventData.coverImg ?? eventToUpdate.coverImg
@@ -37,6 +40,7 @@ class EventsService {
   async createEvent(eventData) {
     const towerEvent = await dbContext.TowerEvents.create(eventData)
     await towerEvent.populate('creator')
+    await towerEvent.populate('ticketCount')
     return towerEvent
   }
 

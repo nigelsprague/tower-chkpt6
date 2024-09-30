@@ -13,7 +13,7 @@ const towerEvents = computed(() => {
   if (filterBy.value == 'all') {
     return AppState.towerEvents
   }
-  return AppState.towerEvents.filter(towerEvent => towerEvent.type == filterBy.value)
+  return AppState.towerEvents.filter(filter => filter.type == filterBy.value)
 })
 
 const filterTypes = [

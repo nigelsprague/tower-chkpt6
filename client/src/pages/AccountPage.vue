@@ -6,10 +6,17 @@ import { logger } from '@/utils/Logger.js';
 import { ticketsService } from '@/services/TicketsService.js';
 import EventCard from '@/components/globals/EventCard.vue';
 
+// defineProps({
+//   ticketEvent: {
+//     type: Event, required: true
+//   }
+// })
+
 const account = computed(() => AppState.account)
 const accountTickets = computed(() => AppState.accountHeldTickets)
 
 // TODO get all of your tickets, reference art terminal 
+
 onMounted(() => {
   getAccountTickets()
 })
@@ -19,7 +26,8 @@ async function getAccountTickets() {
     await ticketsService.getAccountTickets()
   }
   catch (error) {
-    Pop.toast('Could not get Account', 'error', 'center');
+    Pop.error(error);
+    logger.log(error)
   }
 }
 
@@ -44,8 +52,8 @@ async function deleteTicket(ticketId) {
       <img class="rounded" :src="account.picture" alt="" />
       <p>{{ account.email }}</p>
       <section class="row g-3">
-        <div v-for="ticket in accountTickets" :key="ticket.eventId" class="col-md-4 position-relative">
-          <EventCard :eventProp?="ticket.towerEvent" />
+        <div v-for="ticket in accountTickets" :key="ticket.id" class="col-md-4 position-relative">
+          <!-- <EventCard :ticketEvent="ticket.eventId" /> -->
           {{ ticket.towerEvent }}
           {{ ticket.id }}
           <button @click="deleteTicket(ticket.id)" class="btn btn-danger position-absolute top-0 right-0 ">Delete
