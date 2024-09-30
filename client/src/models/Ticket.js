@@ -1,3 +1,4 @@
+import { Event } from "./Event"
 import { Profile } from "./Profile"
 
 export class Ticket{
@@ -17,9 +18,9 @@ export class TicketProfile extends Ticket {
 
 export class TicketEvent extends Ticket {
   /** @type {Event} */
-  towerEvent
+  event
   constructor(data) {
     super(data)
-    this.towerEvent = new Event(data.towerEvent)
+    this.event = new Event(data.event)
   }
 }

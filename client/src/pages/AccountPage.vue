@@ -51,12 +51,10 @@ async function deleteTicket(ticketId) {
       <h1>Welcome {{ account.name }}</h1>
       <img class="rounded" :src="account.picture" alt="" />
       <p>{{ account.email }}</p>
-      <section class="row g-3">
+      <section class="row m-0 g-3">
         <div v-for="ticket in accountTickets" :key="ticket.id" class="col-md-4 position-relative">
-          <!-- <EventCard :ticketEvent="ticket.eventId" /> -->
-          {{ ticket.towerEvent }}
-          {{ ticket.id }}
-          <button @click="deleteTicket(ticket.id)" class="btn btn-danger position-absolute top-0 right-0 ">Delete
+          <EventCard :event-prop="ticket.event" />
+          <button @click="deleteTicket(ticket.id)" class="btn btn-danger position-absolute bottom-0 right-0 ">Delete
             Ticket</button>
         </div>
       </section>

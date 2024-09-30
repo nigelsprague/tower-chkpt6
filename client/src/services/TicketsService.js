@@ -5,6 +5,7 @@ import { logger } from "@/utils/Logger"
 
 class TicketsService{
   async getAccountTickets() {
+    AppState.accountHeldTickets = []
     const res = await api.get('account/tickets')
     const eventTickets = res.data.map(ticketData => new TicketEvent(ticketData))
     AppState.accountHeldTickets = eventTickets

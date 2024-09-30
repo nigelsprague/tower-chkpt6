@@ -1,20 +1,24 @@
 <script setup>
 import { AppState } from '@/AppState';
+import CommentCard from '@/components/globals/CommentCard.vue';
+import { commentsService } from '@/services/CommentsService';
 import { eventsService } from '@/services/EventsService';
 import { ticketsService } from '@/services/TicketsService';
 import { logger } from '@/utils/Logger';
 import Pop from '@/utils/Pop';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 onMounted(() => {
   getEventById()
   getTicketHolders()
+  getCommentsByEvent()
 })
 
 const route = useRoute()
 const towerEvent = computed(() => AppState.activeEvent)
 const user = computed(() => AppState.account)
+const comments = computed(() => AppState.comments)
 const ticketHolder = computed(() => AppState.attendingProfiles)
 
 const spotsLeft = computed(() => AppState.activeEvent.capacity - AppState.activeEvent.ticketCount)
@@ -75,12 +79,38 @@ async function createTicket() {
   }
 }
 
+const editablecommentData = ref({
+  body: ''
+})
 
+async function createComment() {
+  try {
+    const commentData = editablecommentData.value
+    await commentsService.createComment(commentData)
+    editablecommentData.value = {
+      body: ''
+    }
+  }
+  catch (error) {
+    Pop.meow(error);
+    logger.error(error)
+  }
+}
+
+async function getCommentsByEvent() {
+  try {
+    const eventId = route.params.eventId
+    await commentsService.getCommentsByEvent(eventId)
+  }
+  catch (error) {
+    Pop.meow(error);
+  }
+}
 </script>
 
 
 <template>
-  <div class="container mt-md-3 px-0 px-md-5">
+  <div class="container mt-md-3 px-0 px-md-5 mb-4">
     <div v-if="towerEvent">
       <section class="row position-relative m-0 mb-3">
         <div class="rounded bg-dark-glass mx-0 p-0" :style="{ backgroundImage: `url(${towerEvent.coverImg})` }">
@@ -124,8 +154,17 @@ async function createTicket() {
             <h6>Location</h6>
             <p><i class="mdi mdi-map-marker text-info me-2"></i>{{ towerEvent.location }}</p>
           </div>
-          <div>
-            <h1>comments</h1>
+          <h4>See what folks are saying...</h4>
+          <form @submit.prevent="createComment()">
+            <label class="form-label" for="comment">Share your thoughts</label>
+            <div class="d-flex justify-content-between">
+              <input v-model="editablecommentData" class="form-control" type="text" name="comment" id="comment"
+                maxlength="500">
+              <button class="btn bg-success text-light" type="submit">Post</button>
+            </div>
+          </form>
+          <div v-for="comment in comments" :key="comment.id">
+            <CommentCard :comment-prop="comment" />
           </div>
         </div>
 
